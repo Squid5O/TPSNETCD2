@@ -113,5 +113,12 @@ public:
 	//폭팔 VFX 공장
 	UPROPERTY(EditDefaultsOnly)
 	class UParticleSystem* ExplosionExplosionVFXFactory;
+
+	//mainUI를 화면에 보이게하고싶옹
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UMainUI> mainUIFactory;
+
+	UPROPERTY()
+	class UMainUI* mainUI;
 };
 
