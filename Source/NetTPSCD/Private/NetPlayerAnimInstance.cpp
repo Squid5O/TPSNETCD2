@@ -27,4 +27,19 @@ void UNetPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	direction = FVector::DotProduct(velocity, player->GetActorRightVector());
 
 	bHasPistol = player->bHasPistol;
+
+	//player의 Pitch값을 가져와서 PitchAngle에 대입하고 시팓.
+	 ptichAngle = (player->GetBaseAimRotation().GetNormalized().Pitch) * -1;
+
+	//pitchAngle값을 -60~60안에 가둬야해
+	 ptichAngle = FMath::Clamp(ptichAngle, -60, 60);
+}
+
+void UNetPlayerAnimInstance::PlayerFireAnimation()
+{
+	//총을 잡고 있을때만 총쏘기 애니메이션을 하고 싶다.
+	if(bHasPistol && fireMontage)
+	{
+	Montage_Play(fireMontage);
+	}
 }

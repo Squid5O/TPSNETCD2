@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "NetPlayerAnimInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -150,6 +152,35 @@ void ANetTPSCDCharacter::DetachPistol(const AActor* pistol)
 	grabPistol = nullptr;
 }
 
+void ANetTPSCDCharacter::Fire(const FInputActionValue& Value)
+{
+	if (false == bHasPistol || nullptr == grabPistol)
+		return;
+
+	//UNetPlayerAnimInstance::PlayerFireAnimtation 호출하고 싶다.
+	//1.UNetPlayerAnimInstance 가져와
+	auto anim = Cast<UNetPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	//2.PlayerFireAnimtation 가져와
+		anim->PlayerFireAnimation();
+
+	// - 카메라 위치에서 카메라 앞방향으로
+	FHitResult OutHit;
+	FVector Start = FollowCamera->GetComponentLocation();
+	FVector End = Start + FollowCamera->GetForwardVector() * 100000;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, Params);
+
+	//만약 부딪힌곳이 있다면 그곳에 폭팔 VFX를 배치하고 싶다.
+	if(bHit)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionExplosionVFXFactory, OutHit.ImpactPoint);
+		//그곳에 폭팔VFX 배치하고 싶다.
+	}
+
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -172,6 +203,9 @@ void ANetTPSCDCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(PickupPistolAction, ETriggerEvent::Started, this, &ANetTPSCDCharacter::PickupPistol);
 
 		EnhancedInputComponent->BindAction(DropPistolAction, ETriggerEvent::Started, this, &ANetTPSCDCharacter::DropPistol);
+
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ANetTPSCDCharacter::Fire);
+
 	}
 	else
 	{

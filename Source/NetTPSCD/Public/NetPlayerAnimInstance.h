@@ -30,4 +30,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float direction = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UAnimMontage* fireMontage;
+
+	void PlayerFireAnimation();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float ptichAngle;
 };

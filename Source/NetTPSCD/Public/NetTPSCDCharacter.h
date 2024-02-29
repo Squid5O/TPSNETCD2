@@ -102,5 +102,16 @@ public:
 	void AttachPistol(const AActor* pistol);
 	// 총을 손에서 떼는 기능
 	void DetachPistol(const AActor* pistol);
+
+	//마우스 왼쪽 버튼을 클릭하면
+	//총을 쏘고 싶다. 부딛힌것이 있다면 그곳에 폭팔 VFX를 표현하고 싶다.
+	//-입력
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* FireAction;
+
+	void Fire(const FInputActionValue& Value);
+	//폭팔 VFX 공장
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* ExplosionExplosionVFXFactory;
 };
 
