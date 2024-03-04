@@ -146,6 +146,7 @@ public:
 
 	void SetHP(int32 value);
 
+public:
 	void TakeDamage(int32 damage);
 
 	//상대방의 HUD를 추가하고 싶다.
