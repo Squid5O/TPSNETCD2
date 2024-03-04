@@ -34,8 +34,20 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UAnimMontage* fireMontage;
 
-	void PlayerFireAnimation();
+	void PlayFireAnimation();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float ptichAngle;
+
+	//reload 애니메이션을 재생하는 기능을 구현하고 싶다.
+	UPROPERTY(EditDefaultsOnly)
+	class UAnimMontage* reloadMontage;
+
+	void PlayReloadAnimation();
+
+	//reload가 끝났을 때 호출될 이벤트 함수를 구현하고 싶다.
+	UFUNCTION()
+	void AnimNotify_OnReloadFinished();
+
+
 };

@@ -78,6 +78,12 @@ void ANetTPSCDCharacter::BeginPlay()
 	mainUI->SetActiveCrosshair(false);
 	// 우선 처음엔 안보이게 
 
+	//총알 UI를 최대 총알 갯수만큼 생성해주고 싶다.
+	for(int32 i = 0; i < maxBulletCount; i++)
+	{
+		mainUI->AddBulletUI();
+	}
+
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -172,11 +178,28 @@ void ANetTPSCDCharacter::Fire(const FInputActionValue& Value)
 	if (false == bHasPistol || nullptr == grabPistol)
 		return;
 
+	// bulletCount가 0개 이하라면 바로 함수 종료
+	if (bulletCount <= 0)
+	{
+		return;
+	}
+
+	if (isReload)
+		return;
+
+	//1개 차감하고
+	bulletCount--;
+	//총알 UI를 갱신하고 싶다.
+	if(mainUI)
+	{
+		mainUI->RemoveBulletUI(bulletCount);
+	}
+
 	//UNetPlayerAnimInstance::PlayerFireAnimtation 호출하고 싶다.
 	//1.UNetPlayerAnimInstance 가져와
 	auto anim = Cast<UNetPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	//2.PlayerFireAnimtation 가져와
-		anim->PlayerFireAnimation();
+		anim->PlayFireAnimation();
 
 	// - 카메라 위치에서 카메라 앞방향으로
 	FHitResult OutHit;
@@ -194,6 +217,28 @@ void ANetTPSCDCharacter::Fire(const FInputActionValue& Value)
 		//그곳에 폭팔VFX 배치하고 싶다.
 	}
 
+}
+
+void ANetTPSCDCharacter::Reload(const FInputActionValue& Value)
+{
+	if (isReload)
+		return;
+
+	isReload = true;
+
+	//리로드 애니메이션을 재생
+	auto anim = Cast<UNetPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	anim->PlayReloadAnimation();
+}
+
+void ANetTPSCDCharacter::InitAmmo()
+{
+	bulletCount = maxBulletCount;
+	if (mainUI)
+	{
+		mainUI->ReloadBulletUI(maxBulletCount);
+	}
+	isReload = false;
 }
 
 
@@ -220,6 +265,8 @@ void ANetTPSCDCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(DropPistolAction, ETriggerEvent::Started, this, &ANetTPSCDCharacter::DropPistol);
 
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ANetTPSCDCharacter::Fire);
+
+		EnhancedInputComponent->BindAction(RelodadAction, ETriggerEvent::Started, this, &ANetTPSCDCharacter::Reload);
 
 	}
 	else

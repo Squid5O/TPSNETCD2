@@ -17,3 +17,10 @@ FVector forward 기준백터
 
 ㅍㅍ
 -----
+
+03.04
+
+removeChild  객체를 찾아서 지움
+RemoveChildAT 숫자로 지움 - index
+
+스튜디오 변수값 -> 언리얼 bp 함수로 사용 바인딩 가능

@@ -20,4 +20,23 @@ public:
 	class UImage* ImageCrosshair;
 
 	void SetActiveCrosshair(bool bActive);
+
+	//태어날 때 플레이어가 가진 총알의 최대 갯수만큼 표현하고 싶다.
+	//총을 쏘면 하나씩 제거하고 싶다.
+	// 재장전 하면 다시 다 채우고 싶다.
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	class UUniformGridPanel* grid_bullet;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> bulletUIFactory;
+
+	void ReloadBulletUI(int32 MaxBulletCount);
+	void AddBulletUI();
+	void RemoveBulletUI(int32 index);
+
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	class UProgressBar* bar_hp;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float hp = 1.0f;
 };
