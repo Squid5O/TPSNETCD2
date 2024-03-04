@@ -28,4 +28,14 @@ RemoveChildAT 숫자로 지움 - index
 static_cast<float>(hp) , C++ 캐스트 방법 
 (float)hp 도 가능
 
-내일 죽고 네트워크
+내일 죽고 네트워크'
+'
+if(nullptr == 객체)
+if(객체 -> IsValid())
+
+2개의 차이는 무엇인가?
+
+Dangling pointer : 다른 포인터로 메모리 해제를 하는겨우
+PendingKill : Destroy를 하고 실제로 파괴가 되는 대상인가?
+
+InternalGarbage 파괸은 GC가 한다.
