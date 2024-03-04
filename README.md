@@ -24,3 +24,8 @@ removeChild  객체를 찾아서 지움
 RemoveChildAT 숫자로 지움 - index
 
 스튜디오 변수값 -> 언리얼 bp 함수로 사용 바인딩 가능
+
+static_cast<float>(hp) , C++ 캐스트 방법 
+(float)hp 도 가능
+
+내일 죽고 네트워크
