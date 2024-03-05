@@ -30,8 +30,4 @@ public:
 
 	void PrintNetLog();
 
-	/**
-	 * 
-	 */
-
 };

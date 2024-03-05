@@ -20,6 +20,8 @@ ANetTestActor::ANetTestActor()
 void ANetTestActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// È¸Àü
 	
 }
 
@@ -27,6 +29,7 @@ void ANetTestActor::BeginPlay()
 void ANetTestActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	PrintNetLog();
 
 }
 
@@ -49,4 +52,5 @@ void ANetTestActor::PrintNetLog()
 
 	FVector loc = GetActorLocation() + FVector(0, 0, 50);
 	DrawDebugString(GetWorld(), loc, str, nullptr, FColor::White, 0, true, 1.5f);
+
 }
