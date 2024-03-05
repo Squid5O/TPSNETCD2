@@ -61,7 +61,9 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	// To add mapping context
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
 
 	void initUI();
 
@@ -142,6 +144,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 hp = maxHP;
 
+	//hp를 property를 이용해서 접근하고 싶다.
+	__declspec(property(get=GetHP, put=SetHP)) int32 HP;
+
 	int32 GetHP();
 
 	void SetHP(int32 value);
@@ -155,6 +160,13 @@ public:
 
 	UPROPERTY()
 	class UHPbarWidget* hpUI;
+
+	UPROPERTY()
+	bool bDie = false;
+
+	///////////////////////---------------------------------------------------네트워코
+	///
+	void PrintNetLog();
 	
 };
 

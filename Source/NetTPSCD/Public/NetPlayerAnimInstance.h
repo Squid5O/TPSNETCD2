@@ -49,5 +49,8 @@ public:
 	UFUNCTION()
 	void AnimNotify_OnReloadFinished();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bDie = false;
+
 
 };

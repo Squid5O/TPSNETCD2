@@ -24,6 +24,8 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 ANetTPSCDCharacter::ANetTPSCDCharacter()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
@@ -88,6 +90,13 @@ void ANetTPSCDCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+}
+
+void ANetTPSCDCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	PrintNetLog();
 }
 
 void ANetTPSCDCharacter::PickupPistol(const FInputActionValue& Value)
@@ -267,13 +276,44 @@ void ANetTPSCDCharacter::SetHP(int32 value)
 
 void ANetTPSCDCharacter::TakeDamage(int32 damage)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ANetTPSCDCharacter::TakeDamage"));
+//	UE_LOG(LogTemp, Warning, TEXT("ANetTPSCDCharacter::TakeDamage"));
 
+	HP = FMath::Clamp<int32>(HP - damage, 0, maxHP);
+
+	//만약 체력이 0 이하라면 bDie를 true로 하고싶다
+	if(HP<=0)
+	{
+		bDie = true;
+	}
+
+	/*
 	//데미지 만큼 체력을 감소하고 싶다.
 	int32 newHP = GetHP() - damage;
 	newHP = FMath::Clamp(newHP, 0, maxHP);
 	//int newHP = FMath::Clamp<int32>(GetHP() - damage, 0 , maxHP);  줄인거
 	SetHP(newHP);
+	*/
+}
+
+void ANetTPSCDCharacter::PrintNetLog()
+{
+	//UE_LOG(LogTemp, Warning, TEXT("11"));
+	//오너가 있는가?
+	FString owner = GetOwner() ? GetOwner()->GetName() : TEXT("NoOwner");
+	//NetConnection이 있는가?
+	FString conn = GetNetConnection() ? TEXT("ValidCon") : TEXT("InvalidCon");
+	//LocalRole
+	FString localRole = UEnum::GetValueAsString<ENetRole>(GetLocalRole());
+	//RemoteRole
+	FString remoteRole = UEnum::GetValueAsString<ENetRole>(GetRemoteRole());
+
+	//if(IsLocal)
+
+	FString str = FString::Printf(TEXT("Owner : %s\nConnecetion : %s\nlocalRole : %s\nremoteRole : %s"
+									), *owner, *conn, *localRole, *remoteRole);
+
+	FVector loc = GetActorLocation() + FVector(0, 0, 50);
+	DrawDebugString(GetWorld(), loc, str, nullptr, FColor::White, 0, true, 1.5f);
 }
 
 void ANetTPSCDCharacter::initUI()

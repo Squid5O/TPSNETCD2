@@ -33,6 +33,9 @@ void UNetPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	//pitchAngle값을 -60~60안에 가둬야해
 	 ptichAngle = FMath::Clamp(ptichAngle, -60, 60);
+
+	// 플레이어의 bDie를 기억하고싶다
+	 bDie = player->bDie;
 }
 
 void UNetPlayerAnimInstance::PlayFireAnimation()
